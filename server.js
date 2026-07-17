@@ -2,7 +2,7 @@ const http = require("http");
 const fs = require("fs");
 const url = require("url");
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const DB_FILE = "shtStudiosDB";
 const CFG_FILE = "shtStudiosConfig";
 
@@ -31,6 +31,48 @@ function sendJSON(res, data, status = 200) {
     });
 
     res.end(JSON.stringify(data));
+}
+
+/* ============================================================
+   Static file serving (index.html, admin.html, style.css, ...)
+   ============================================================ */
+
+const path = require("path");
+
+const MIME_TYPES = {
+    ".html": "text/html; charset=utf-8",
+    ".css":  "text/css; charset=utf-8",
+    ".js":   "text/javascript; charset=utf-8",
+    ".json": "application/json; charset=utf-8",
+    ".png":  "image/png",
+    ".jpg":  "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".svg":  "image/svg+xml",
+    ".ico":  "image/x-icon"
+};
+
+const PUBLIC_DIR = __dirname;
+
+function serveStaticFile(req, res, pathname) {
+    // "/" -> index.html
+    let requestedPath = pathname === "/" ? "/index.html" : pathname;
+
+    // Resolve safely inside PUBLIC_DIR to block path traversal (../..)
+    const safePath = path.normalize(path.join(PUBLIC_DIR, requestedPath));
+    if (!safePath.startsWith(PUBLIC_DIR)) {
+        res.writeHead(403);
+        return res.end("Forbidden");
+    }
+
+    fs.readFile(safePath, (err, data) => {
+        if (err) {
+            res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+            return res.end("404 - Not Found");
+        }
+        const ext = path.extname(safePath).toLowerCase();
+        res.writeHead(200, { "Content-Type": MIME_TYPES[ext] || "application/octet-stream" });
+        res.end(data);
+    });
 }
 
 const server = http.createServer((req, res) => {
@@ -159,7 +201,14 @@ const server = http.createServer((req, res) => {
     }
 
     // ==========================
-    // 404
+    // Static files (index.html, admin.html, style.css, app.js, ...)
+    // ==========================
+    if (req.method === "GET") {
+        return serveStaticFile(req, res, parsedUrl.pathname);
+    }
+
+    // ==========================
+    // 404 (non-GET requests to unknown routes)
     // ==========================
     res.writeHead(404);
     res.end();
