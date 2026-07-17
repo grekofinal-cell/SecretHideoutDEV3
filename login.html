@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — SHT Studios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #7c3aed; --primary-light: #a78bfa; --primary-dark: #5b21b6;
+      --accent: #06b6d4; --danger: #ef4444; --success: #10b981;
+      --bg: #0a0a0f; --surface: rgba(255,255,255,0.05);
+      --border: rgba(255,255,255,0.08); --border-focus: rgba(124,58,237,0.5);
+      --text: #f1f0ff; --text-muted: #9ca3af; --text-faint: #6b7280;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Animated background */
+    .bg-glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-glow-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+      top: -200px; left: -200px;
+      animation: glowPulse 6s ease-in-out infinite;
+    }
+    .bg-glow-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+      bottom: -100px; right: -100px;
+      animation: glowPulse 8s ease-in-out infinite reverse;
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.1); }
+    }
+
+    /* Particles */
+    .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute; border-radius: 50%;
+      animation: floatUp linear infinite; opacity: 0;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 0.5; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+    }
+
+    /* Login Card */
+    .login-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      padding: 2.5rem;
+      background: rgba(15,15,26,0.9);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+      animation: cardIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+    .logo-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(124,58,237,0.5);
+      flex-shrink: 0;
+    }
+    .logo-icon svg { width: 22px; height: 22px; color: white; }
+    .logo-text { text-align: left; }
+    .logo-name { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
+    .logo-sub  { font-size: 0.75rem; color: var(--text-faint); font-weight: 500; margin-top: 1px; }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 1.75rem;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    /* Form */
+    .form-group { margin-bottom: 1.1rem; }
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 0.45rem;
+      color: var(--text-muted);
+    }
+    .input-wrap { position: relative; }
+    .input-icon {
+      position: absolute;
+      left: 13px; top: 50%;
+      transform: translateY(-50%);
+      width: 16px; height: 16px;
+      color: var(--text-faint);
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    input {
+      width: 100%;
+      padding: 12px 13px 12px 40px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    input::placeholder { color: var(--text-faint); }
+    input:focus {
+      border-color: var(--border-focus);
+      background: rgba(124,58,237,0.06);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+    }
+    input.error {
+      border-color: rgba(239,68,68,0.6);
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+    }
+
+    /* Eye toggle for password */
+    .eye-btn {
+      position: absolute;
+      right: 12px; top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-faint);
+      padding: 4px;
+      display: flex;
+      transition: color 0.2s;
+    }
+    .eye-btn:hover { color: var(--text-muted); }
+    .eye-btn svg { width: 16px; height: 16px; }
+
+    /* Error message */
+    .error-msg {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 14px;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 10px;
+      font-size: 0.85rem;
+      color: var(--danger);
+      margin-bottom: 1.1rem;
+      animation: shake 0.4s ease;
+    }
+    .error-msg.show { display: flex; }
+    .error-msg svg  { width: 16px; height: 16px; flex-shrink: 0; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%       { transform: translateX(-8px); }
+      40%       { transform: translateX(8px); }
+      60%       { transform: translateX(-5px); }
+      80%       { transform: translateX(5px); }
+    }
+
+    /* Login Button */
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 11px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+      transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 0.5rem;
+    }
+    .btn-login:hover { box-shadow: 0 6px 30px rgba(124,58,237,0.55); transform: translateY(-1px); }
+    .btn-login:active { transform: scale(0.97); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-login svg { width: 17px; height: 17px; }
+
+    .spinner { animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Attempts warning */
+    .attempts-warn {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--danger);
+      margin-top: 0.75rem;
+      min-height: 1em;
+    }
+
+    /* Back link */
+    .back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 1.5rem;
+      color: var(--text-faint);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.2s;
+    }
+    .back:hover { color: var(--text-muted); }
+    .back svg { width: 13px; height: 13px; }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="login-card" id="loginCard">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      </div>
+      <div class="logo-text">
+        <div class="logo-name">SHT Studios</div>
+        <div class="logo-sub">Admin Access Only</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2>Sign In</h2>
+    <p class="subtitle">Enter your credentials to access the admin panel.</p>
+
+    <div class="error-msg" id="errorMsg">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="errorText">Incorrect username or password.</span>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+          <input type="text" id="username" placeholder="Enter username" autocomplete="username" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="password" placeholder="Enter password" autocomplete="current-password" />
+          <button type="button" class="eye-btn" id="eyeBtn" tabindex="-1">
+            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login" id="loginBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="loginIcon"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        <span id="loginBtnText">Access Admin Panel</span>
+      </button>
+
+      <div class="attempts-warn" id="attemptsWarn"></div>
+    </form>
+
+    <a href="index.html" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+      Back to registration page
+    </a>
+  </div>
+
+  <script>
+    /* ---- Particles ---- */
+    (function() {
+      const c = document.getElementById('particles');
+      const colors = ['rgba(124,58,237,0.6)','rgba(6,182,212,0.5)','rgba(167,139,250,0.4)'];
+      for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const s = Math.random() * 3 + 1.5;
+        p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*18+12}s;animation-delay:${Math.random()*-20}s`;
+        c.appendChild(p);
+      }
+    })();
+
+    /* ---- Credentials (hardcoded) ---- */
+    const VALID_USER = 'SHT Studios';
+    const VALID_PASS = 'SHTSTUDIOS';
+    const SESSION_KEY = 'shtAdminAuth';
+    const MAX_ATTEMPTS = 5;
+    const LOCKOUT_MS = 60 * 1000; // 1 minute
+
+    /* If already logged in, redirect immediately */
+    if (sessionStorage.getItem(SESSION_KEY) === 'granted') {
+      window.location.replace('admin.html');
+    }
+
+    let attempts = parseInt(localStorage.getItem('shtLoginAttempts') || '0');
+    let lockUntil = parseInt(localStorage.getItem('shtLockUntil') || '0');
+
+    /* ---- Eye Toggle ---- */
+    document.getElementById('eyeBtn').addEventListener('click', () => {
+      const pw  = document.getElementById('password');
+      const ico = document.getElementById('eyeIcon');
+      if (pw.type === 'password') {
+        pw.type = 'text';
+        ico.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+      } else {
+        pw.type = 'password';
+        ico.innerHTML = `<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>`;
+      }
+    });
+
+    /* ---- Login Form ---- */
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const now = Date.now();
+      const errorEl = document.getElementById('errorMsg');
+      const errorTxt = document.getElementById('errorText');
+      const warnEl   = document.getElementById('attemptsWarn');
+      const btn      = document.getElementById('loginBtn');
+      const btnTxt   = document.getElementById('loginBtnText');
+      const ico      = document.getElementById('loginIcon');
+
+      // Check lockout
+      if (lockUntil > now) {
+        const secs = Math.ceil((lockUntil - now) / 1000);
+        errorTxt.textContent = `Too many attempts. Try again in ${secs}s.`;
+        errorEl.classList.add('show');
+        return;
+      }
+
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+
+      // Loading state
+      btn.disabled = true;
+      btnTxt.textContent = 'Checking...';
+      ico.innerHTML = `<path d="M21 12a9 9 0 1 1-6.219-8.56"/>`;
+      ico.classList.add('spinner');
+
+      setTimeout(() => {
+        if (user === VALID_USER && pass === VALID_PASS) {
+          // ✅ Correct
+          sessionStorage.setItem(SESSION_KEY, 'granted');
+          localStorage.removeItem('shtLoginAttempts');
+          localStorage.removeItem('shtLockUntil');
+
+          // Success animation
+          ico.classList.remove('spinner');
+          ico.innerHTML = `<polyline points="20 6 9 17 4 12"/>`;
+          btnTxt.textContent = 'Access Granted!';
+          btn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+          btn.style.boxShadow = '0 4px 20px rgba(16,185,129,0.4)';
+
+          setTimeout(() => window.location.replace('admin.html'), 600);
+        } else {
+          // ❌ Wrong
+          attempts++;
+          localStorage.setItem('shtLoginAttempts', attempts);
+
+          if (attempts >= MAX_ATTEMPTS) {
+            lockUntil = Date.now() + LOCKOUT_MS;
+            localStorage.setItem('shtLockUntil', lockUntil);
+            errorTxt.textContent = `Too many failed attempts. Locked for 60 seconds.`;
+            warnEl.textContent = '';
+          } else {
+            errorTxt.textContent = 'Incorrect username or password.';
+            const left = MAX_ATTEMPTS - attempts;
+            warnEl.textContent = left === 1
+              ? '⚠️ 1 attempt remaining before lockout.'
+              : `${left} attempts remaining.`;
+          }
+
+          errorEl.classList.remove('show');
+          void errorEl.offsetWidth; // re-trigger animation
+          errorEl.classList.add('show');
+
+          document.getElementById('username').classList.add('error');
+          document.getElementById('password').classList.add('error');
+          document.getElementById('password').value = '';
+
+          btn.disabled = false;
+          ico.classList.remove('spinner');
+          ico.innerHTML = `<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>`;
+          btnTxt.textContent = 'Access Admin Panel';
+        }
+      }, 700);
+    });
+
+    // Clear error style on type
+    ['username','password'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        document.getElementById(id).classList.remove('error');
+        document.getElementById('errorMsg').classList.remove('show');
+      });
+    });
+  </script>
+</body>
+</html>

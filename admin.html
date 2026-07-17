@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — SHT Studios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+  <!-- 🔒 Auth Guard: redirect to login if not authenticated -->
+  <script>
+    if (sessionStorage.getItem('shtAdminAuth') !== 'granted') {
+      window.location.replace('login.html');
+    }
+  </script>
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      </div>
+      <span>Admin Panel</span>
+    </div>
+
+    <div class="sidebar-label">Navigation</div>
+    <button class="sidebar-item active" id="tab-registrations" onclick="switchTab('registrations')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Registrations
+    </button>
+    <button class="sidebar-item" id="tab-config" onclick="switchTab('config')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
+      Configuration
+    </button>
+    <button class="sidebar-item" id="tab-api" onclick="switchTab('api')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      API Guide
+    </button>
+
+    <div class="sidebar-spacer"></div>
+    <a href="index.html" class="sidebar-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+      Back to Site
+    </a>
+    <button onclick="logout()" class="sidebar-back" style="border:none;cursor:pointer;color:#ef4444;background:rgba(239,68,68,0.08);border-radius:9px;width:100%;margin-top:4px;padding:9px 12px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Logout
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+
+    <!-- === REGISTRATIONS TAB === -->
+    <div id="view-registrations">
+      <div class="admin-header">
+        <div>
+          <h1>Registrations</h1>
+          <p>Manage all player verification IDs</p>
+        </div>
+        <button class="btn btn-danger" id="clear-all-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Clear All
+        </button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div class="stat-info">
+            <div class="value" id="admin-stat-total">0</div>
+            <div class="label">Total Registrations</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="stat-info">
+            <div class="value" id="admin-stat-active">0</div>
+            <div class="label">Active IDs</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          </div>
+          <div class="stat-info">
+            <div class="value" id="admin-stat-verifications">0</div>
+            <div class="label">Total Verifications</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon cyan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="stat-info">
+            <div class="value" id="admin-stat-revoked">0</div>
+            <div class="label">Revoked IDs</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h2>All Registrations</h2>
+          <div class="table-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="search-input" placeholder="Search by username or ID..." />
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Roblox Username</th>
+                <th>Verification ID</th>
+                <th>Discord</th>
+                <th>Status</th>
+                <th>Registered</th>
+                <th>Verifications</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="registrations-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="empty-state" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+          <p>No registrations yet. Share the registration page to get started!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- === CONFIG TAB === -->
+    <div id="view-config" hidden>
+      <div class="admin-header">
+        <div>
+          <h1>Configuration</h1>
+          <p>Set up your game IDs and access restrictions</p>
+        </div>
+      </div>
+
+      <div class="config-section">
+        <div class="config-card">
+          <h3>🎮 Main Game Place ID</h3>
+          <p>The Roblox Place ID of the game players should be launched into. Found in the URL: <code style="color:#a78bfa">roblox.com/games/<strong>YOUR_ID</strong>/...</code></p>
+          <div class="config-row">
+            <input type="text" class="config-input" id="cfg-placeId" placeholder="e.g. 12345678" maxlength="20" />
+            <button class="btn btn-primary" onclick="saveField('placeId', 'cfg-placeId')">Save</button>
+          </div>
+        </div>
+
+        <div class="config-card">
+          <h3>🔀 Redirect Game Place ID</h3>
+          <p>Players without a valid ID will be teleported to this game instead of kicked. Recommended: a waiting room or public game.</p>
+          <div class="config-row">
+            <input type="text" class="config-input" id="cfg-redirectPlaceId" placeholder="e.g. 9876543210" maxlength="20" />
+            <button class="btn btn-primary" onclick="saveField('redirectPlaceId', 'cfg-redirectPlaceId')">Save</button>
+          </div>
+        </div>
+
+        <div class="config-card">
+          <h3>🔐 Access Code Requirement</h3>
+          <p>If enabled, players must enter a valid access code during registration. Add multiple codes separated by commas.</p>
+          <div class="config-row" style="margin-bottom:12px">
+            <label class="toggle-group">
+              <label class="toggle">
+                <input type="checkbox" id="cfg-requireCode" onchange="saveToggle('requireCode', this.checked)" />
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="toggle-label">Require access code</span>
+            </label>
+          </div>
+          <div class="config-row">
+            <input type="text" class="config-input" id="cfg-accessCodes" placeholder="e.g. ALPHA2024, BETA2024, STAFF" />
+            <button class="btn btn-primary" onclick="saveAccessCodes()">Save Codes</button>
+          </div>
+        </div>
+
+        <div class="config-card">
+          <h3>🔑 API Secret Key</h3>
+          <p>Use this key in your Roblox Lua script when making HTTP requests to the verification API. Keep it secret!</p>
+          <div class="config-row">
+            <input type="text" class="config-input" id="cfg-apiKey" readonly style="cursor:pointer;font-family:monospace;font-size:0.85rem" onclick="this.select()" />
+            <button class="btn btn-primary" onclick="regenerateApiKey()">Regenerate</button>
+          </div>
+        </div>
+
+        <div class="config-card" style="border-color:rgba(239,68,68,0.3)">
+          <h3>⚠️ Danger Zone</h3>
+          <p>Permanently delete all registration data. This cannot be undone.</p>
+          <button class="btn btn-danger" onclick="dangerClearAll()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Delete All Registrations
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- === API GUIDE TAB === -->
+    <div id="view-api" hidden>
+      <div class="admin-header">
+        <div>
+          <h1>API Guide</h1>
+          <p>How to connect your Roblox game to this website</p>
+        </div>
+      </div>
+
+      <div class="config-section">
+        <div class="config-card">
+          <h3>📌 Important Note</h3>
+          <p style="color:#f59e0b;margin-top:8px">This launcher uses <strong>localStorage</strong> as its database — it works great for testing and small communities. For a large production game with many concurrent players, you would host this website on a real server with a database (e.g. Supabase, Firebase, or a Node.js backend). The Roblox Lua code below works the same way regardless.</p>
+        </div>
+
+        <div class="config-card">
+          <h3>Step 1 — Configure Place IDs</h3>
+          <p>Go to the <strong>Configuration</strong> tab and fill in your Main Game Place ID and your Redirect Place ID (for players without a valid ID).</p>
+        </div>
+
+        <div class="config-card">
+          <h3>Step 2 — The Roblox Lua Script</h3>
+          <p>Add this script to <strong>ServerScriptService</strong> in Roblox Studio. Replace the placeholder values with your actual website URL and API key.</p>
+          <pre id="lua-code-block" style="background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:1.25rem;margin-top:1rem;font-family:'Courier New',monospace;font-size:0.8rem;color:#a78bfa;white-space:pre-wrap;overflow-x:auto;line-height:1.6">Loading...</pre>
+          <button class="btn btn-primary" style="margin-top:1rem" onclick="copyLuaCode()">Copy Lua Script</button>
+        </div>
+
+        <div class="config-card">
+          <h3>Step 3 — Enable HTTP Requests</h3>
+          <p>In Roblox Studio, go to <strong>Game Settings → Security</strong> and enable <strong>"Allow HTTP Requests"</strong>. Without this, the Lua script cannot call your website's API.</p>
+        </div>
+
+        <div class="config-card">
+          <h3>Step 4 — Share the Registration Link</h3>
+          <p>Share this website with your players. Once registered, they click the <strong>Launch Roblox Game</strong> button — it automatically embeds their ID and opens Roblox.</p>
+          <p style="margin-top:8px;font-family:monospace;font-size:0.85rem;color:#a78bfa" id="site-url-display">Open this file in a browser to get the URL.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="db.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

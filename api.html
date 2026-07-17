@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference — SHT Studios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #7c3aed; --primary-light: #a78bfa;
+      --accent: #06b6d4; --accent-light: #67e8f9;
+      --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+      --bg: #0a0a0f; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --text: #f1f0ff; --text-muted: #9ca3af; --text-faint: #6b7280;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ---- This page acts as a simple API endpoint ---- */
+    /* When called with ?action=verify&id=XXX it returns JSON */
+
+    .page-wrap { max-width: 800px; margin: 0 auto; padding: 80px 2rem 4rem; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text-muted); text-decoration: none; font-size: 0.875rem;
+      margin-bottom: 2rem; transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--text); }
+    .back-link svg { width: 14px; height: 14px; }
+    h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; }
+    .endpoint-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .method-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+    .method-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+    .get { background: rgba(16,185,129,0.15); color: var(--success); }
+    .endpoint-url {
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: var(--accent-light);
+    }
+    h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    p  { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
+    .params-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+    .params-table th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      background: rgba(0,0,0,0.2);
+    }
+    .params-table td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+    .param-name { font-family: monospace; color: var(--primary-light); }
+    .param-req  { color: var(--danger); font-size: 0.75rem; font-weight: 700; }
+    code-block {
+      display: block;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-family: monospace;
+      font-size: 0.82rem;
+      white-space: pre;
+      overflow-x: auto;
+      line-height: 1.7;
+      color: #e2e8f0;
+      margin-top: 0.75rem;
+    }
+    .json-key    { color: var(--accent-light); }
+    .json-val-t  { color: var(--success); }
+    .json-val-f  { color: var(--danger); }
+    .json-val-s  { color: #fcd34d; }
+    .note {
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: 0.875rem;
+      color: var(--warning);
+      margin-top: 1rem;
+    }
+    .note strong { color: #fde68a; }
+
+    /* JSON response output area */
+    #json-response-area {
+      display: none;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 10px;
+      padding: 1.25rem;
+      font-family: monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      white-space: pre;
+      margin-top: 1rem;
+      color: var(--success);
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <a href="index.html" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+    Back to Registration
+  </a>
+
+  <h1>API Reference</h1>
+  <p class="subtitle">This page acts as your verification API endpoint. Your Roblox game calls this URL to verify player IDs.</p>
+
+  <div class="endpoint-card">
+    <div class="method-row">
+      <span class="method-badge get">GET</span>
+      <code class="endpoint-url" id="endpoint-url-display">api.html?action=verify&id={REGISTRATION_ID}&key={API_KEY}</code>
+    </div>
+
+    <h2>Verify Registration ID</h2>
+    <p>Call this endpoint from your Roblox server-side Lua script using <code>HttpService:GetAsync()</code>. It returns JSON indicating whether the player's registration ID is valid.</p>
+
+    <table class="params-table">
+      <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="param-name">action</td>
+          <td>string</td>
+          <td class="param-req">Required</td>
+          <td>Must be <code>verify</code></td>
+        </tr>
+        <tr>
+          <td class="param-name">id</td>
+          <td>string</td>
+          <td class="param-req">Required</td>
+          <td>The player's Verification ID (from <code>Player:GetJoinData().LaunchData</code>)</td>
+        </tr>
+        <tr>
+          <td class="param-name">key</td>
+          <td>string</td>
+          <td class="param-req">Required</td>
+          <td>Your API secret key (set in the Admin Panel → Configuration)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong style="color:var(--text)">Example Response (valid ID):</strong></p>
+    <code-block><span class="json-key">{</span>
+  <span class="json-key">"valid"</span>: <span class="json-val-t">true</span>,
+  <span class="json-key">"robloxUsername"</span>: <span class="json-val-s">"PlayerName"</span>,
+  <span class="json-key">"registeredAt"</span>: <span class="json-val-s">1720000000000</span>
+<span class="json-key">}</span></code-block>
+
+    <p style="margin-top:1rem"><strong style="color:var(--text)">Example Response (invalid/revoked):</strong></p>
+    <code-block><span class="json-key">{</span>
+  <span class="json-key">"valid"</span>: <span class="json-val-f">false</span>
+<span class="json-key">}</span></code-block>
+
+    <div class="note">
+      <strong>⚠️ Production Note:</strong> This website uses <strong>localStorage</strong>, which means the API only works when the page is open in a browser on the same computer. For real-time verification across many players, you should host this as a proper web server (Node.js, Python Flask, etc.) with a database. The Roblox Lua script structure stays exactly the same.
+    </div>
+  </div>
+
+  <div class="endpoint-card">
+    <h2>Test the API</h2>
+    <p>Enter a Verification ID to test the API response right now:</p>
+    <div style="display:flex;gap:10px">
+      <input type="text" id="test-id-input" placeholder="SHT-XXXXX-XXXXX-XXXXX"
+        style="flex:1;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;outline:none" />
+      <button onclick="testApi()" style="padding:10px 20px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;border-radius:10px;font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer">
+        Test
+      </button>
+    </div>
+    <div id="json-response-area"></div>
+  </div>
+
+</div>
+
+<script src="db.js"></script>
+<script>
+  // Set the URL display
+  const base = window.location.origin + window.location.pathname;
+  document.getElementById('endpoint-url-display').textContent =
+    base + '?action=verify&id={REGISTRATION_ID}&key={API_KEY}';
+
+  // Handle actual API calls via URL params
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('action') === 'verify') {
+    const id  = params.get('id') || '';
+    const key = params.get('key') || '';
+    const cfg = getConfig();
+
+    // Validate API key
+    if (cfg.apiKey && key !== cfg.apiKey) {
+      document.body.innerHTML = JSON.stringify({ valid: false, error: 'Invalid API key' });
+      document.body.style.cssText = 'font-family:monospace;padding:20px;background:#0a0a0f;color:#ef4444';
+    } else {
+      const result = verifyId(id);
+      document.body.innerHTML = JSON.stringify(result);
+      document.body.style.cssText = 'font-family:monospace;padding:20px;background:#0a0a0f;color:#10b981';
+    }
+  }
+
+  // Test tool
+  function testApi() {
+    const id = document.getElementById('test-id-input').value.trim();
+    const result = verifyId(id);
+    const area = document.getElementById('json-response-area');
+    area.style.display = 'block';
+    area.style.color = result.valid ? 'var(--success)' : 'var(--danger)';
+    area.textContent = JSON.stringify(result, null, 2);
+  }
+
+  document.getElementById('test-id-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') testApi();
+  });
+</script>
+</body>
+</html>

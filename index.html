@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roblox SHT Studios — Register to Play</title>
+  <meta name="description" content="Register your account to receive an exclusive Verification ID and join our private Roblox experience." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated background particles -->
+  <div class="bg-particles" id="bg-particles"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        </div>
+        <span>SHT Studios</span>
+      </div>
+      <div class="nav-links">
+        <a href="#register" class="nav-link">Register</a>
+        <a href="login.html" class="nav-link">Admin</a>
+        <a href="api.html" class="nav-link">API Docs</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Exclusive Access System
+      </div>
+      <h1 class="hero-title">
+        Your Gateway to<br />
+        <span class="gradient-text">Private Gaming</span>
+      </h1>
+      <p class="hero-subtitle">
+        Register your account to receive a unique <strong>Verification ID</strong>. 
+        Use the launcher to join our exclusive Roblox experience — no ID, no access.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value" id="stat-registered">0</span>
+          <span class="stat-label">Registered</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-value" id="stat-active">0</span>
+          <span class="stat-label">Active IDs</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-value" id="stat-verified">0</span>
+          <span class="stat-label">Verified Joins</span>
+        </div>
+      </div>
+      <a href="#register" class="btn btn-primary hero-cta">
+        Get Your ID
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="hero-visual">
+      <div class="card-3d">
+        <div class="card-3d-inner">
+          <div class="id-card">
+            <div class="id-card-header">
+              <div class="id-card-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </div>
+              <span class="id-card-title">GAME PASS</span>
+            </div>
+            <div class="id-card-body">
+              <div class="id-card-avatar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+              </div>
+              <div class="id-card-info">
+                <div class="id-card-name">Player Name</div>
+                <div class="id-card-code" id="demo-id-display">••••••••••••</div>
+                <div class="id-card-status">
+                  <span class="status-dot status-active"></span> ACTIVE
+                </div>
+              </div>
+            </div>
+            <div class="id-card-footer">
+              <div class="id-card-barcode">
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="section-container">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">Three Simple Steps</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>Register Below</h3>
+          <p>Fill in your Roblox username and details. A unique Verification ID will be generated for your account.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>
+          </div>
+          <h3>Copy Your ID</h3>
+          <p>Save your unique Verification ID somewhere safe. This ID is your access key to the private game.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          </div>
+          <h3>Launch the Game</h3>
+          <p>Click the Launch button. Roblox opens automatically with your ID attached — the server verifies you instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Registration Section -->
+  <section class="register-section" id="register">
+    <div class="section-container">
+      <div class="section-label">Get Started</div>
+      <h2 class="section-title">Register Your Account</h2>
+
+      <!-- Registration Form -->
+      <div class="register-wrapper">
+        <div class="register-form-card" id="form-card">
+          <div class="form-header">
+            <div class="form-header-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <h3>Create Registration</h3>
+              <p>Instant verification ID generation</p>
+            </div>
+          </div>
+
+          <form id="registerForm" novalidate>
+            <div class="form-group">
+              <label for="robloxUsername">Roblox Username *</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+                <input type="text" id="robloxUsername" placeholder="YourRobloxUsername" required minlength="3" maxlength="20" autocomplete="off" />
+              </div>
+              <span class="field-error" id="error-username"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="discordUsername">Discord Username <span class="optional">(optional)</span></label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><path d="M7.5 7.2C8.4 6.4 9.7 6 11 6h2c1.3 0 2.6.4 3.5 1.2M7.5 16.8C8.4 17.6 9.7 18 11 18h2c1.3 0 2.6-.4 3.5-1.2M3 12a9 9 0 0 0 18 0"/></svg>
+                <input type="text" id="discordUsername" placeholder="username#0000" maxlength="37" autocomplete="off" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="accessCode">Access Code <span class="optional">(if required by admin)</span></label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input type="text" id="accessCode" placeholder="Leave blank if not required" maxlength="30" autocomplete="off" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+              <span class="btn-text">Generate My Verification ID</span>
+              <span class="btn-spinner" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+              </span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Success Card (hidden initially) -->
+        <div class="success-card" id="success-card" hidden>
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <h3 class="success-title">Registration Successful!</h3>
+          <p class="success-subtitle">Welcome, <span id="success-username" class="highlight"></span>! Your Verification ID is ready.</p>
+
+          <div class="id-display">
+            <div class="id-label">Your Verification ID</div>
+            <div class="id-value-wrapper">
+              <code class="id-value" id="verification-id-display"></code>
+              <button class="copy-btn" id="copy-btn" title="Copy to clipboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              </button>
+            </div>
+            <div class="id-warning">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+              Save this ID! It cannot be recovered if lost.
+            </div>
+          </div>
+
+          <div class="launch-section">
+            <div class="launch-label">Ready to play?</div>
+            <button class="btn btn-launch" id="launch-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              Launch Roblox Game
+            </button>
+            <p class="launch-hint">Click to open Roblox with your ID automatically attached</p>
+          </div>
+
+          <div class="existing-check">
+            <button class="btn btn-ghost" id="register-another-btn">Register Another Account</button>
+          </div>
+        </div>
+
+        <!-- Check Existing ID -->
+        <div class="check-card">
+          <div class="check-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            Already have an ID?
+          </div>
+          <div class="check-form">
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="text" id="lookupId" placeholder="Paste your Verification ID here" maxlength="50" autocomplete="off" />
+            </div>
+            <button class="btn btn-secondary" id="lookup-btn">Look Up ID</button>
+          </div>
+          <div class="lookup-result" id="lookup-result" hidden></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <div class="logo-icon small">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        </div>
+        <span>SHT Studios</span>
+      </div>
+      <p class="footer-text">This is a registration system for an exclusive Roblox experience. Not affiliated with Roblox Corporation.</p>
+      <div class="footer-links">
+        <a href="admin.html">Admin Panel</a>
+        <a href="api.html">API Reference</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
