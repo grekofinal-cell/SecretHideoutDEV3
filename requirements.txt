@@ -1,4 +1,0 @@
-# SHT Studios Server Dependencies
-# server.py uses only Python standard library modules:
-# http.server, socketserver, urllib.parse, json, os
-# No external packages required.
