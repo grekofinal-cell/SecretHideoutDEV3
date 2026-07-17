@@ -25,8 +25,8 @@ const CFG_KEY = "shtStudiosConfig";
    ============================================================ */
 
 
-const UPSTASH_URL   = process.env.https://regular-hamster-170572.upstash.io;
-const UPSTASH_TOKEN = process.env.gQAAAAAAAppMAAIgcDFhMGI3NzNkYzA3MjU0NWZiOWYzZjUzZDM4ZTEzODk1ZA;
+const UPSTASH_URL   = "https://regular-hamster-170572.upstash.io";
+const UPSTASH_TOKEN = "gQAAAAAAAppMAAIgcDFhMGI3NzNkYzA3MjU0NWZiOWYzZjUzZDM4ZTEzODk1ZA";
 const USE_UPSTASH   = Boolean(UPSTASH_URL && UPSTASH_TOKEN);
 
 async function upstashGet(key) {
